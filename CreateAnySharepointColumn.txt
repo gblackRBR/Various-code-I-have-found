@@ -1,0 +1,86 @@
+function CreateListColumn() {
+    // You can optionally specify the Site URL here to get the context
+    // If you don't specify the URL, the method will get the context of the current site
+    // var clientContext = new SP.ClientContext("https://disa.deps.mil/ORG/DCC/EVWD");
+    var clientContext = new SP.ClientContext();
+ 
+    var olistCollection = clientContext.get_web().get_lists();
+    var oList = olistCollection.getByTitle("List Name");
+ 
+    var oFields = oList.get_fields();
+ 
+    // It is very important that we don't specify any space in field internal name.
+    // If you want the method to consider your internal name and NOT the display name, you need to specify "AddFieldOptions.AddFieldInternalNameHint" as an option in below line of code
+ 
+    //// AddFieldOptions ////
+ 
+    // 1. defaultValue - specify that a new field added to the list must also be added to the default content type in the site collection.
+ 
+    // 2. addToDefaultContentType - specify that a new field added to the list must also be added to the default content type in the site collection.
+ 
+    // 3. addToNoContentType - specify that a new field must not be added to any other content type.
+ 
+    // 4. addToAllContentTypes - specify that a new field that is added to the specified list must also be added to all content types in the site collection.
+ 
+    // 5. addFieldInternalNameHint - specify adding an internal field name hint for the purpose of avoiding possible database locking or field renaming operations.
+ 
+    // 6. addFieldToDefaultView - specify that a new field that is added to the specified list must also be added to the default list view.
+ 
+    // 7. addFieldCheckDisplayName - specify to confirm that no other field has the same display name.
+ 
+    // Type - Text
+    var plainTextField = oFields.addFieldAsXml('<Field Type="Text" DisplayName="Text Column 1" Name="Text Column 1" Required="False" />', true, SP.AddFieldOptions.defaultValue);
+    plainTextField.set_description("This is text column");
+    plainTextField.update();
+ 
+    // Type - Note - Multi line
+    var plainNoteField = oFields.addFieldAsXml('<Field Type="Note" DisplayName="Note Column 1" Name="NoteColumn1" Required="False" RichText="False" NumLines="6" AppendOnly="True"/>', true, SP.AddFieldOptions.defaultValue);
+    plainNoteField.set_description("This is Note column");
+    plainNoteField.update();
+ 
+    // Type - Note - Multi line - Rich Text
+    var NotehtmlField = oFields.addFieldAsXml('<Field Type="Note" DisplayName="Note Column 2" Name="NoteColumn2" Required="False" RichText="TRUE" NumLines="10" AppendOnly="True"/>', true, SP.AddFieldOptions.defaultValue);
+    NotehtmlField.set_description("Rich Text Multi line field");
+    NotehtmlField.update();
+ 
+    // Type - Note - Multi line - Enhanced Rich Text
+    var NoteFullhtmlField = oFields.addFieldAsXml('<Field Type="Note" DisplayName="Note Column 3" Name="NoteColumn3" Required="False" RichText="TRUE" RichTextMode="FullHtml" NumLines="15" AppendOnly="True"/>', true, SP.AddFieldOptions.defaultValue);
+    NoteFullhtmlField.set_description("Enhanced Multi line field");
+    NoteFullhtmlField.update();
+ 
+    // Type - Boolean
+    var BooleanField = oFields.addFieldAsXml('<Field Type="Boolean" DisplayName="BooleanColumn" Name="BooleanColumn" Required="False" ><Default>0</Default></Field>', true, SP.AddFieldOptions.defaultValue);
+    BooleanField.set_description("Boolean field");
+    BooleanField.update();
+ 
+    // Type - Image
+    var imageField = oFields.addFieldAsXml('<Field Type="URL" DisplayName="ImageColumn" Name="Image Column" Required="False" Format="Image"></Field>', true, SP.AddFieldOptions.defaultValue);
+    imageField.set_description("Image field");
+    imageField.update();
+ 
+    // Type - HyperLink
+    var HyperLinkField = oFields.addFieldAsXml('<Field Type="URL" DisplayName="HyperLinkColumn" Name="HyperLink Column" Required="False" Format="Hyperlink"></Field>', true, SP.AddFieldOptions.defaultValue);
+    HyperLinkField.set_description("HyperLink field");
+    HyperLinkField.update();
+ 
+    // Type - Number
+    var NumberField = oFields.addFieldAsXml('<Field Type="Number" DisplayName="Number Column" Name="Number Column" Required="False" ></Field>', true, SP.AddFieldOptions.defaultValue);
+    NumberField.set_description("Number field");
+    NumberField.update();
+ 
+    // Type - User
+    var NumberField = oFields.addFieldAsXml('<Field Type="User" DisplayName="User Column" Name="User Column" Required="False" Format="Hyperlink"></Field>', true, SP.AddFieldOptions.defaultValue);
+    NumberField.set_description("User field");
+    NumberField.update();
+ 
+    // Execute the query to the server.
+    clientContext.executeQueryAsync(onsuccess, onfailed);
+}
+ 
+function onsuccess() {
+    console.log('Success');
+}
+ 
+function onfailed(sender, args) {
+    console.log('Failed' + args.get_message() + '\n' + args.get_stackTrace());
+}
