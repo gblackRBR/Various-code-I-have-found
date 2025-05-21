@@ -1,0 +1,34 @@
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script>
+$(document).ready(function() {
+    console.log("Script is running!");
+
+    $("textarea[title='Q1']").on("input", function() {
+        console.log("Detected input change!");
+
+        var values = $(this).val().split(",").map(v => v.trim()); // Extract comma-separated values
+        console.log("Extracted values:", values);
+
+        var choiceFieldContainer = $("#_x0051_2_e038f064-e74b-4b8a-8ed9-5335b9ca78ff_MultiChoiceTable tbody");
+        choiceFieldContainer.empty(); // Remove previous choices
+
+        values.forEach(function(value, index) {
+            var checkboxId = "_x0051_2_e038f064-e74b-4b8a-8ed9-5335b9ca78ff_MultiChoiceOption_" + index;
+
+            var checkbox = $("<input>")
+                .attr("type", "checkbox")
+                .attr("id", checkboxId)
+                .attr("name", "Q2") // Ensure this matches your field name
+                .attr("value", value);
+
+            var label = $("<label>")
+                .attr("for", checkboxId)
+                .text(value);
+
+            var row = $("<tr>").append($("<td>").append($("<span>").addClass("ms-RadioText").append(checkbox).append(label)));
+
+            choiceFieldContainer.append(row);
+        });
+    });
+});
+</script>
